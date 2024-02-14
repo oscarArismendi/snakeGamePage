@@ -48,4 +48,8 @@ function generateFood() {
     return {x,y};
 }
 
-//50
+draw()
+
+function move() {
+    const head = { ...snake[0]};//ensure that we create a new object and the snake doesn't modify
+}
