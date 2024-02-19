@@ -127,13 +127,13 @@ function handleKeyPress(event) {
             case "ArrowLeft":
             case "a":
             case "A":
-                if(direction === "left" && snake.length > 1){break;}
+                if(direction === "right" && snake.length > 1){break;}
                 direction = "left";
                 break;
             case "ArrowRight":
             case "d":
             case "D":
-                if(direction === "right" && snake.length > 1){break;}
+                if(direction === "left" && snake.length > 1){break;}
                 direction = "right";
                 break;
         }

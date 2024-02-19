@@ -1,7 +1,6 @@
 *{
     margin:0;
     padding: 0;
-    box-sizing: border-box;
 }
 
 body{
@@ -45,7 +44,7 @@ body, .snake{
 
 #instruction-text{
     position:absolute;
-    top:60%;
+    top:64%;
     color: #333;
     width: 300px;
     text-align: center;
