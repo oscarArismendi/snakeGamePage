@@ -222,18 +222,9 @@ function updateHighScore() {
     const currentScore = snake.length -1;
     if(currentScore > highScore){
         highScore = currentScore;
-        highScoreText.textContent = highScore.toString().padStart(3,"0")
-        highScoreText.style.display = "block";
+        highScoreText.textContent = highScore.toString().padStart(3,"0");
     }
-}
-
-function sleep(milliseconds) {
-    var start = new Date().getTime();
-    for (var i = 0; i < 1e7; i++) {
-        if ((new Date().getTime() - start) > milliseconds){
-            break;
-        }
-    }
+    highScoreText.style.display = "block";
 }
 
 function blinkSnake() {
@@ -261,21 +252,4 @@ function blinkSnake() {
             },500);
         },500);
     },0);
-    
-
-
-
-
-    // board.innerHTML = "";
-    // console.log("1")
-    // sleep(500);
-    // drawSnake();
-    // console.log("2")
-    // sleep(500);
-    // console.log("3")
-    // board.innerHTML = "";
-    // sleep(500);
-    // console.log("4")
-    // drawSnake();
-    // sleep(500);
 }
