@@ -1,3 +1,5 @@
+// import { sleep } from "../js/utils" 
+
 //html elements
 const board = document.getElementById("game-board");
 const instructionText = document.getElementById("instruction-text");
@@ -7,6 +9,7 @@ const highScoreText = document.getElementById("highScore");
 //global variables
 let gridSize = 20;
 let direction = "right";
+let lastMove = direction;
 let gameInterval;
 let gameSpeedDelay = 200;
 let gameStarted = false;
@@ -54,8 +57,18 @@ function drawFood() {
 }
 
 function generateFood() {
-    const x = Math.floor(Math.random() * gridSize) +1;
-    const y = Math.floor(Math.random() * gridSize) +1;
+    let x = Math.floor(Math.random() * gridSize) +1;
+    let y = Math.floor(Math.random() * gridSize) +1;
+    for(segment of snake){
+        if(segment.x === x || segment.y === y){
+            let n = snake.length
+            x = snake[n-1].x;
+            y = snake[n-1].y;
+            console.log("have to change the food");
+            break;
+        }
+    }
+    console.log(x,y);
     return {x,y};
 }
 
@@ -63,18 +76,22 @@ function move() {
     const head = {...snake[0]};//ensure that we create a new object and the snake doesn't modify
     switch(direction) {
         case "right":
+            lastMove = "right";
             head.x++;
             if(head.x > gridSize){head.x = 1;}
             break;
         case "left":
+            lastMove = "left";
             head.x--;
             if(head.x < 1){head.x = 20;}
             break;
         case "up":
+            lastMove = "up";
             head.y--;
             if(head.y < 1){head.y = 20;}
             break;
         case "down":
+            lastMove = "down";
             head.y++;
             if(head.y > gridSize){head.y = 1;}
             break;
@@ -115,25 +132,25 @@ function handleKeyPress(event) {
             case "ArrowUp":
             case "w":
             case "W":
-                if(direction === "down" && snake.length > 1){break;}
+                if(lastMove === "down" && snake.length > 1){break;}
                 direction = "up";
                 break;
             case "ArrowDown":
             case "s":
             case "S":
-                if(direction === "up" && snake.length > 1){break;}
+                if(lastMove === "up" && snake.length > 1){break;}
                 direction = "down";
                 break;
             case "ArrowLeft":
             case "a":
             case "A":
-                if(direction === "right" && snake.length > 1){break;}
+                if(lastMove === "right" && snake.length > 1){break;}
                 direction = "left";
                 break;
             case "ArrowRight":
             case "d":
             case "D":
-                if(direction === "left" && snake.length > 1){break;}
+                if(lastMove === "left" && snake.length > 1){break;}
                 direction = "right";
                 break;
         }
@@ -166,12 +183,18 @@ function checkCollision() {
 
 function resetGame() {
     updateHighScore();
-    stopGame();
-    snake = [{x: 10, y: 10}];
-    food = generateFood();
-    direction = "right";
-    gameSpeedDelay = 200;
-    updateScore();
+    setTimeout(()=>{
+        stopGame();
+        setTimeout(() => {
+            snake = [{x: 10, y: 10}];
+            food = generateFood();
+            direction = "right";
+            gameSpeedDelay = 200;
+            updateScore();
+        },3100)
+    },0);
+    
+    
 }
 
 function updateScore() {
@@ -181,16 +204,78 @@ function updateScore() {
 
 function stopGame() {
     clearInterval(gameInterval);
-    gameStarted = false;
-    instructionText.style.display = "block";
-    logo.style.display = "block";
+    setTimeout(() =>{
+        blinkSnake()
+        setTimeout(() =>{
+            console.log("pass blink")
+            board.innerHTML = "";
+            gameStarted = false;
+            instructionText.style.display = "block";
+            logo.style.display = "block";
+        },3000);
+    },0);
+    
+    
 }
 
 function updateHighScore() {
     const currentScore = snake.length -1;
     if(currentScore > highScore){
         highScore = currentScore;
-        highScoreText.textContent = currentScore.toString().padStart(3,"0");
+        highScoreText.textContent = highScore.toString().padStart(3,"0")
+        highScoreText.style.display = "block";
     }
-    highScoreText.style.display = "block";
+}
+
+function sleep(milliseconds) {
+    var start = new Date().getTime();
+    for (var i = 0; i < 1e7; i++) {
+        if ((new Date().getTime() - start) > milliseconds){
+            break;
+        }
+    }
+}
+
+function blinkSnake() {
+    setTimeout(() =>{
+        board.innerHTML = "";
+        console.log(direction);
+        setTimeout(() =>{
+            drawSnake()
+            // console.log("2");
+            setTimeout(() =>{
+                board.innerHTML = "";
+                // console.log("3");
+                setTimeout(() =>{
+                    drawSnake();
+                    // console.log("4");
+                    setTimeout(() =>{
+                        board.innerHTML = "";
+                        // console.log("5");
+                        setTimeout(() =>{
+                            drawSnake();
+                            console.log("6");
+                        },500);
+                    },500);
+                },500);
+            },500);
+        },500);
+    },0);
+    
+
+
+
+
+    // board.innerHTML = "";
+    // console.log("1")
+    // sleep(500);
+    // drawSnake();
+    // console.log("2")
+    // sleep(500);
+    // console.log("3")
+    // board.innerHTML = "";
+    // sleep(500);
+    // console.log("4")
+    // drawSnake();
+    // sleep(500);
 }

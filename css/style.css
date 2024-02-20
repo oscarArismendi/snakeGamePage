@@ -50,6 +50,7 @@ body, .snake{
     text-align: center;
     text-transform: capitalize;
     padding: 30px;
+    font-size: x-large;
 }
 
 .scores{
